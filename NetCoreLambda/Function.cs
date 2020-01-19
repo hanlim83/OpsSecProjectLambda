@@ -1,5 +1,7 @@
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Amazon.Lambda.Core;
+using Amazon.Lambda.S3Events;
 using Microsoft.Extensions.DependencyInjection;
 using NetCoreLambda.Abstractions;
 using NetCoreLambda.DI;
@@ -13,40 +15,44 @@ namespace NetCoreLambda
     public class Function
     {
         // Repository
-        public IProductRepository ProductRepository { get; }
+        public ILogInputsRepository LogInputsRepository { get; }
 
         public Function()
         {
             // Get dependency resolver
             var resolver = new DependencyResolver(ConfigureServices);
 
-            // Get products repo
-            ProductRepository = resolver.ServiceProvider.GetService<IProductRepository>();
+            LogInputsRepository = resolver.ServiceProvider.GetService<ILogInputsRepository>();
         }
 
-        // Use this ctor from unit tests that can mock IProductRepository
-        public Function(IProductRepository productRepository)
+        public Function(ILogInputsRepository logInputsRepository)
         {
-            ProductRepository = productRepository;
+            LogInputsRepository = logInputsRepository;
         }
 
-        /// <summary>
-        /// A simple function that takes an id and returns a product.
-        /// </summary>
-        /// <param name="input"></param>
-        /// <param name="context"></param>
-        /// <returns></returns>
-        public async Task<Product> FunctionHandler(string input, ILambdaContext context)
+        public async Task<List<LogInput>> FunctionHandler(S3Event s3event, ILambdaContext context)
         {
-            int.TryParse(input, out var id);
-            if (id == 0) return null;
-            return await ProductRepository.GetProduct(id);
+            List<LogInput> updatedInputs = new List<LogInput>();
+            foreach (var record in s3event.Records)
+            {
+                string bucket = record.S3.Bucket.Name.Substring(13).Replace('-', ' ');
+                if (LogInputsRepository.IfInputExist(bucket) && !LogInputsRepository.InputIngestionStatus(bucket))
+                {
+                    if (LogInputsRepository.UpdateInputIngestionStatus(bucket))
+                    {
+                        LogInput retrieved = await LogInputsRepository.GetLogInput(bucket);
+                        if (retrieved != null)
+                            updatedInputs.Add(retrieved);
+                    }
+                }
+            }
+            return updatedInputs;
         }
 
         // Register services with DI system
         private void ConfigureServices(IServiceCollection services)
         {
-            services.AddTransient<IProductRepository, ProductRepository>();
+            services.AddTransient<ILogInputsRepository, LogInputsRepository>();
         }
     }
 }

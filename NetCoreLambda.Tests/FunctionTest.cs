@@ -7,7 +7,7 @@ namespace NetCoreLambda.Tests
 {
     public class FunctionTest
     {
-        [Fact]
+       /* [Fact]
         public async void Function_Should_Return_Product_By_Id()
         {
             // Mock IProductRepository
@@ -24,6 +24,6 @@ namespace NetCoreLambda.Tests
             var function = new Function(mockRepo.Object);
             var result = await function.FunctionHandler("1", new TestLambdaContext());
             Assert.Equal(expected, result);
-        }
+        }*/
     }
 }

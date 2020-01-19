@@ -4,16 +4,16 @@ using NetCoreLambda.DI;
 
 namespace NetCoreLambda.EF.Design
 {
-    public class SampleDbContextFactory : IDesignTimeDbContextFactory<SampleDbContext>
+    public class LogDbContextFactory : IDesignTimeDbContextFactory<LogContext>
     {
-        public SampleDbContext CreateDbContext(string[] args)
+        public LogContext CreateDbContext(string[] args)
         {
             // Get DbContext from DI system
             var resolver = new DependencyResolver
             {
                 CurrentDirectory = Path.Combine(Directory.GetCurrentDirectory(), "../NetCoreLambda")
             };
-            return resolver.ServiceProvider.GetService(typeof(SampleDbContext)) as SampleDbContext;
+            return resolver.ServiceProvider.GetService(typeof(LogContext)) as LogContext;
         }
     }
 }

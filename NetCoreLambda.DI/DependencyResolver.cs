@@ -1,6 +1,5 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using NetCoreLambda.Abstractions;
 using NetCoreLambda.Configuration;
@@ -37,10 +36,11 @@ namespace NetCoreLambda.DI
             services.AddTransient(provider =>
             {
                 var configService = provider.GetService<IConfigurationService>();
-                var connectionString = configService.GetConfiguration().GetConnectionString(nameof(SampleDbContext));
-                var optionsBuilder = new DbContextOptionsBuilder<SampleDbContext>();
-                optionsBuilder.UseSqlServer(connectionString, builder => builder.MigrationsAssembly("NetCoreLambda.EF.Design"));
-                return new SampleDbContext(optionsBuilder.Options);
+                var environmentService = provider.GetService<IEnvironmentService>();
+                var connectionString = environmentService.DBConnectionString;
+                var optionsBuilder = new DbContextOptionsBuilder<LogContext>();
+                optionsBuilder.UseSqlServer(connectionString);
+                return new LogContext(optionsBuilder.Options);
             });
 
             // Register other services

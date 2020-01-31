@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp2.1</TargetFramework>
+    <TargetFramework>netstandard2.0</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>
@@ -11,9 +11,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\NetCoreLambda.Abstractions\NetCoreLambda.Abstractions.csproj" />
-    <ProjectReference Include="..\NetCoreLambda.DI\NetCoreLambda.DI.csproj" />
-    <ProjectReference Include="..\NetCoreLambda.EF\NetCoreLambda.EF.csproj" />
+    <ProjectReference Include="..\OpsSecProjectLambda.Abstractions\OpsSecProjectLambda.Abstractions.csproj" />
+    <ProjectReference Include="..\OpsSecProjectLambda.Configuration\OpsSecProjectLambda.Configuration.csproj" />
+    <ProjectReference Include="..\OpsSecProjectLambda.EF\OpsSecProjectLambda.EF.csproj" />
   </ItemGroup>
 
 </Project>

@@ -14,13 +14,18 @@
     <PackageReference Include="Amazon.Lambda.Core" Version="1.1.0" />
     <PackageReference Include="Amazon.Lambda.S3Events" Version="1.1.0" />
     <PackageReference Include="Amazon.Lambda.Serialization.Json" Version="1.7.0" />
+    <PackageReference Include="AWSSDK.Extensions.NETCore.Setup" Version="3.3.100.1" />
+    <PackageReference Include="AWSSDK.S3" Version="3.3.110.19" />
+    <PackageReference Include="AWSSDK.SageMaker" Version="3.3.110.4" />
+    <PackageReference Include="CsvHelper" Version="14.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.App" Version="2.1.5" />
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\NetCoreLambda.Abstractions\NetCoreLambda.Abstractions.csproj" />
-    <ProjectReference Include="..\NetCoreLambda.Configuration\NetCoreLambda.Configuration.csproj" />
-    <ProjectReference Include="..\NetCoreLambda.DI\NetCoreLambda.DI.csproj" />
+    <ProjectReference Include="..\OpsSecProjectLambda.Abstractions\OpsSecProjectLambda.Abstractions.csproj" />
+    <ProjectReference Include="..\OpsSecProjectLambda.Configuration\OpsSecProjectLambda.Configuration.csproj" />
+    <ProjectReference Include="..\OpsSecProjectLambda.DI\OpsSecProjectLambda.DI.csproj" />
   </ItemGroup>
 
   <ItemGroup>

@@ -1,13 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.28307.168
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29728.190
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NetCoreLambda", "NetCoreLambda\NetCoreLambda.csproj", "{F2F29A2A-9893-46E4-A64B-67C198234912}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpsSecProjectLambda", "OpsSecProjectLambda\OpsSecProjectLambda.csproj", "{F2F29A2A-9893-46E4-A64B-67C198234912}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NetCoreLambda.Tests", "NetCoreLambda.Tests\NetCoreLambda.Tests.csproj", "{B4C11B6D-D4D9-4AFD-989E-3F499348CA35}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpsSecProjectLambda.Tests", "OpsSecProjectLambda.Tests\OpsSecProjectLambda.Tests.csproj", "{B4C11B6D-D4D9-4AFD-989E-3F499348CA35}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NetCoreLambda.Abstractions", "NetCoreLambda.Abstractions\NetCoreLambda.Abstractions.csproj", "{7B5155D5-8F6B-4FAF-A13C-11FFF8CC4DF1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpsSecProjectLambda.Abstractions", "OpsSecProjectLambda.Abstractions\OpsSecProjectLambda.Abstractions.csproj", "{7B5155D5-8F6B-4FAF-A13C-11FFF8CC4DF1}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{968F6DFA-5EC3-4752-BF10-6AF7A44D152C}"
 	ProjectSection(SolutionItems) = preProject
@@ -15,13 +15,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		Readme.md = Readme.md
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NetCoreLambda.Configuration", "NetCoreLambda.Configuration\NetCoreLambda.Configuration.csproj", "{0E58BEE1-71C8-4E2F-A827-F2ADD844A3D8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpsSecProjectLambda.Configuration", "OpsSecProjectLambda.Configuration\OpsSecProjectLambda.Configuration.csproj", "{0E58BEE1-71C8-4E2F-A827-F2ADD844A3D8}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NetCoreLambda.DI", "NetCoreLambda.DI\NetCoreLambda.DI.csproj", "{DFF87AA5-90EB-4E2B-9D44-D87695A630FD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpsSecProjectLambda.DI", "OpsSecProjectLambda.DI\OpsSecProjectLambda.DI.csproj", "{DFF87AA5-90EB-4E2B-9D44-D87695A630FD}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NetCoreLambda.EF.Design", "NetCoreLambda.EF.Design\NetCoreLambda.EF.Design.csproj", "{CF4A5EE6-A161-4C5A-BDA4-F8D2CB60A121}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpsSecProjectLambda.EF.Design", "OpsSecProjectLambda.EF.Design\OpsSecProjectLambda.EF.Design.csproj", "{CF4A5EE6-A161-4C5A-BDA4-F8D2CB60A121}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NetCoreLambda.EF", "NetCoreLambda.EF\NetCoreLambda.EF.csproj", "{CBFE26DA-E7DE-4BCC-B86A-1C45163F05F0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpsSecProjectLambda.EF", "OpsSecProjectLambda.EF\OpsSecProjectLambda.EF.csproj", "{CBFE26DA-E7DE-4BCC-B86A-1C45163F05F0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

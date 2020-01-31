@@ -17,8 +17,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\NetCoreLambda.Abstractions\NetCoreLambda.Abstractions.csproj" />
-    <ProjectReference Include="..\NetCoreLambda\NetCoreLambda.csproj" />
+    <ProjectReference Include="..\OpsSecProjectLambda.Abstractions\OpsSecProjectLambda.Abstractions.csproj" />
+    <ProjectReference Include="..\OpsSecProjectLambda\OpsSecProjectLambda.csproj" />
   </ItemGroup>
 
 </Project>

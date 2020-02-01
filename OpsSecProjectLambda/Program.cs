@@ -1,4 +1,4 @@
-﻿namespace NetCoreLambda
+﻿namespace OpsSecProjectLambda
 {
     public class Program
     {

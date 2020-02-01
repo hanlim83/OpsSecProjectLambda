@@ -1,4 +1,4 @@
-﻿namespace NetCoreLambda.Configuration
+﻿namespace OpsSecProjectLambda.Configuration
 {
     public static class Constants
     {
@@ -9,6 +9,7 @@
             public const string RDSPort = "RDS_PORT";
             public const string RDSUsername = "RDS_USERNAME";
             public const string RDSPassword = "RDS_PASSWORD";
+            public const string GLUEExecutionRole = "GLUE_EXECUTION_ROLE";
         }
 
         public static class Environments

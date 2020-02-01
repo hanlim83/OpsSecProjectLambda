@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
 
-namespace NetCoreLambda.Abstractions
+namespace OpsSecProjectLambda.Abstractions
 {
     public interface IConfigurationService
     {

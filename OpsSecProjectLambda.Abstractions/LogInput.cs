@@ -1,12 +1,16 @@
 ﻿using System.Collections.Generic;
 
-namespace NetCoreLambda.Abstractions
+namespace OpsSecProjectLambda.Abstractions
 {
+    public enum LogInputCategory
+    {
+        SSH, ApacheWebServer, SquidProxy, WindowsEventLogs
+    }
     public class LogInput
     {
         public int ID { get; set; }
         public string Name { get; set; }
-        public string FilePath { get; set; }
+        public LogInputCategory LogInputCategory { get; set; }
         public string ConfigurationJSON { get; set; }
         public bool InitialIngest { get; set; }
         public int LinkedUserID { get; set; }

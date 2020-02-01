@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace NetCoreLambda.Abstractions
+namespace OpsSecProjectLambda.Abstractions
 {
     public class GlueDatabase
     {

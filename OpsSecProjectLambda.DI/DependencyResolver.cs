@@ -1,11 +1,11 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using NetCoreLambda.Abstractions;
-using NetCoreLambda.Configuration;
-using NetCoreLambda.EF;
+using OpsSecProjectLambda.Abstractions;
+using OpsSecProjectLambda.Configuration;
+using OpsSecProjectLambda.EF;
 
-namespace NetCoreLambda.DI
+namespace OpsSecProjectLambda.DI
 {
     public class DependencyResolver
     {
@@ -39,10 +39,9 @@ namespace NetCoreLambda.DI
                 var environmentService = provider.GetService<IEnvironmentService>();
                 var connectionString = environmentService.DBConnectionString;
                 var optionsBuilder = new DbContextOptionsBuilder<LogContext>();
-                optionsBuilder.UseSqlServer(connectionString);
+                optionsBuilder.UseLazyLoadingProxies().UseSqlServer(connectionString);
                 return new LogContext(optionsBuilder.Options);
             });
-
             // Register other services
             RegisterServices?.Invoke(services);
         }

@@ -1,8 +1,8 @@
 ﻿using System.IO;
 using Microsoft.Extensions.Configuration;
-using NetCoreLambda.Abstractions;
+using OpsSecProjectLambda.Abstractions;
 
-namespace NetCoreLambda.Configuration
+namespace OpsSecProjectLambda.Configuration
 {
     public class ConfigurationService : IConfigurationService
     {

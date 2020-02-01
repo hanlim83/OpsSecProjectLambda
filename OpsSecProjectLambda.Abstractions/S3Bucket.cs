@@ -1,5 +1,5 @@
 ﻿
-namespace NetCoreLambda.Abstractions
+namespace OpsSecProjectLambda.Abstractions
 {
     public class S3Bucket
     {

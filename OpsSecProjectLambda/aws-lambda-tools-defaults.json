@@ -7,15 +7,18 @@
         "All the command line options for the Lambda command can be specified in this file."
     ],
     "profile"     : "default",
-    "region"      : "eu-west-1",
-    "configuration" : "Release",
+    "region"      : "ap-southeast-1",
+    "configuration" : "Debug",
     "framework"     : "netcoreapp2.1",
     "function-runtime" : "dotnetcore2.1",
     "function-memory-size" : 256,
-    "function-timeout"     : 30,
-    "function-handler"     : "NetCoreLambda::NetCoreLambda.Function::FunctionHandler",
-    "environment-variables" : "\"ASPNETCORE_ENVIRONMENT\"=\"Staging\";\"env1\"=\"val1\";\"env2\"=\"val2\"",
-    "function-name"         : "NetCoreLambda",
-    "function-role"         : "arn:aws:iam::779191825743:role/lambda_basic_execution",
-    "tracing-mode"          : "PassThrough"
+    "function-timeout"     : 300,
+    "function-handler"     : "OpsSecProjectLambda::OpsSecProjectLambda.Function::FunctionHandler",
+    "environment-variables" : "\"GLUE_EXECUTION_ROLE\"=\"arn:aws:iam::188363912800:role/GlueServiceRole\";\"RDS_HOSTNAME\"=\"ospj-dev.cveglglrcyfg.ap-southeast-1.rds.amazonaws.com\";\"RDS_PASSWORD\"=\"53lMOOm5RMfvwC3j1nDL\";\"ASPNETCORE_ENVIRONMENT\"=\"Staging\";\"RDS_PORT\"=\"1433\";\"RDS_USERNAME\"=\"admin\"",
+    "function-name"         : "SmartInsights-Glue-Automator",
+    "function-role"         : "arn:aws:iam::188363912800:role/lambda_glue_automator",
+    "tracing-mode"          : "Active",
+    "function-subnets"      : "subnet-0ec54691793a65a7b,subnet-0daa6ec8e25a13077",
+    "function-security-groups" : "sg-0e1e79f6d49b3ed11",
+    "function-description"     : ""
 }

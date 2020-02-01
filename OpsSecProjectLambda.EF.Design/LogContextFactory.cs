@@ -1,17 +1,16 @@
 ﻿using System.IO;
 using Microsoft.EntityFrameworkCore.Design;
-using NetCoreLambda.DI;
+using OpsSecProjectLambda.DI;
 
-namespace NetCoreLambda.EF.Design
+namespace OpsSecProjectLambda.EF.Design
 {
     public class LogDbContextFactory : IDesignTimeDbContextFactory<LogContext>
     {
         public LogContext CreateDbContext(string[] args)
         {
-            // Get DbContext from DI system
             var resolver = new DependencyResolver
             {
-                CurrentDirectory = Path.Combine(Directory.GetCurrentDirectory(), "../NetCoreLambda")
+                CurrentDirectory = Path.Combine(Directory.GetCurrentDirectory(), "../OpsSecProjectLambda")
             };
             return resolver.ServiceProvider.GetService(typeof(LogContext)) as LogContext;
         }

@@ -28,94 +28,239 @@ namespace OpsSecProjectLambda
             GlueClient = new AmazonGlueClient();
         }
 
-        public async Task<List<LogInput>> FunctionHandler(S3Event s3event, ILambdaContext context)
+        public async Task FunctionHandler(S3Event s3event, ILambdaContext context)
         {
-            List<LogInput> updatedInputs = new List<LogInput>();
-            foreach (var record in s3event.Records)
+            if (s3event != null)
             {
-                context.Logger.LogLine(record.S3.Bucket.Name);
-                string bucket = record.S3.Bucket.Name.Substring(14).Replace('-', ' ');
-                context.Logger.LogLine(bucket);
-                if (LogContextOperations.IfInputExist(bucket))
+                foreach (var record in s3event.Records)
                 {
-                    LogInput retrievedLI = LogContextOperations.GetLogInput(bucket);
-                    GlueConsolidatedEntity retrievedGCE = LogContextOperations.GetGlueConsolidatedEntity(retrievedLI.ID);
-                    context.Logger.LogLine(retrievedLI.ID+" | "+retrievedLI.Name);
-                    if (retrievedLI.InitialIngest == false && retrievedGCE == null)
+                    context.Logger.LogLine(record.S3.Bucket.Name);
+                    string bucket = record.S3.Bucket.Name.Substring(14).Replace('-', ' ');
+                    context.Logger.LogLine(bucket);
+                    if (LogContextOperations.IfInputExist(bucket))
                     {
-                        context.Logger.LogLine("Log Input has not be crawled before and has no crawler");
-                        CreateCrawlerResponse createCrawlerResponse = await GlueClient.CreateCrawlerAsync(new CreateCrawlerRequest
+                        LogInput retrievedLI = LogContextOperations.GetLogInputByName(bucket);
+                        GlueConsolidatedEntity retrievedGCE = LogContextOperations.GetGlueConsolidatedEntity(retrievedLI.ID);
+                        context.Logger.LogLine(retrievedLI.ID + " | " + retrievedLI.Name);
+                        if (retrievedLI.InitialIngest == false && retrievedGCE == null)
                         {
-                            Name = retrievedLI.Name,
-                            DatabaseName = LogContextOperations.GetGlueDatabase().Name,
-                            Role = "GlueServiceRole",
-                            SchemaChangePolicy = new SchemaChangePolicy
+                            context.Logger.LogLine("Log Input has not be crawled before and has no crawler");
+                            CreateCrawlerResponse createCrawlerResponse = await GlueClient.CreateCrawlerAsync(new CreateCrawlerRequest
                             {
-                                DeleteBehavior = DeleteBehavior.DEPRECATE_IN_DATABASE,
-                                UpdateBehavior = UpdateBehavior.UPDATE_IN_DATABASE
-                            },
-                            Tags = new Dictionary<string, string>
+                                Name = retrievedLI.Name,
+                                DatabaseName = LogContextOperations.GetGlueDatabase().Name,
+                                Role = "GlueServiceRole",
+                                SchemaChangePolicy = new SchemaChangePolicy
+                                {
+                                    DeleteBehavior = DeleteBehavior.DEPRECATE_IN_DATABASE,
+                                    UpdateBehavior = UpdateBehavior.UPDATE_IN_DATABASE
+                                },
+                                Tags = new Dictionary<string, string>
                                 {
                                     {"Project","OSPJ" }
                                 },
-                            Targets = new CrawlerTargets
-                            {
-                                S3Targets = new List<S3Target>
+                                Targets = new CrawlerTargets
+                                {
+                                    S3Targets = new List<S3Target>
                                     {
                                         new S3Target
                                         {
                                             Path = "s3://"+LogContextOperations.GetInputS3BucketName(retrievedLI.ID)
                                         }
                                     }
-                            }
-                        });
-                        if (createCrawlerResponse.HttpStatusCode.Equals(HttpStatusCode.OK))
-                        {
-                            context.Logger.LogLine("Crawler Created");
-                            StartCrawlerResponse startCrawlerResponse = await GlueClient.StartCrawlerAsync(new StartCrawlerRequest
-                            {
-                                Name = retrievedLI.Name
+                                }
                             });
-                            if (startCrawlerResponse.HttpStatusCode.Equals(HttpStatusCode.OK))
+                            if (createCrawlerResponse.HttpStatusCode.Equals(HttpStatusCode.OK))
                             {
-                                context.Logger.LogLine("Crawler Just Created Started");
-                                LogContextOperations.AddGlueConsolidatedEntity(new GlueConsolidatedEntity
+                                context.Logger.LogLine("Crawler Created");
+                                StartCrawlerResponse startCrawlerResponse = await GlueClient.StartCrawlerAsync(new StartCrawlerRequest
                                 {
-                                    CrawlerName = retrievedLI.Name,
-                                    LinkedLogInputID = retrievedLI.ID
+                                    Name = retrievedLI.Name
                                 });
-                                LogContextOperations.UpdateInputIngestionStatus(bucket);
-                                updatedInputs.Add(retrievedLI);
+                                if (startCrawlerResponse.HttpStatusCode.Equals(HttpStatusCode.OK))
+                                {
+                                    context.Logger.LogLine("Crawler Just Created Started");
+                                    LogContextOperations.AddGlueConsolidatedEntity(new GlueConsolidatedEntity
+                                    {
+                                        CrawlerName = retrievedLI.Name,
+                                        LinkedLogInputID = retrievedLI.ID
+                                    });
+                                    LogContextOperations.UpdateInputIngestionStatus(bucket);
+                                }
                             }
                         }
-                    }
-                    else if (retrievedLI.InitialIngest == false && retrievedGCE != null)
-                    {
-                        context.Logger.LogLine("Log Input has not be crawled before but has a crawler");
-                        GetCrawlerResponse getCrawlerResponse = await GlueClient.GetCrawlerAsync(new GetCrawlerRequest
+                        else if (retrievedLI.InitialIngest == false && retrievedGCE != null)
                         {
-                            Name = retrievedGCE.CrawlerName
-                        });
-                        if (getCrawlerResponse.Crawler.State.Equals(CrawlerState.READY))
-                        {
-                            StartCrawlerResponse startCrawlerResponse = await GlueClient.StartCrawlerAsync(new StartCrawlerRequest
+                            context.Logger.LogLine("Log Input has not be crawled before but has a crawler");
+                            GetCrawlerResponse getCrawlerResponse = await GlueClient.GetCrawlerAsync(new GetCrawlerRequest
                             {
                                 Name = retrievedGCE.CrawlerName
                             });
-                            if (startCrawlerResponse.HttpStatusCode.Equals(HttpStatusCode.OK))
+                            if (getCrawlerResponse.Crawler.State.Equals(CrawlerState.READY))
                             {
-                                context.Logger.LogLine("Crawler Started");
-                                LogContextOperations.UpdateInputIngestionStatus(bucket);
-                                updatedInputs.Add(retrievedLI);
+                                StartCrawlerResponse startCrawlerResponse = await GlueClient.StartCrawlerAsync(new StartCrawlerRequest
+                                {
+                                    Name = retrievedGCE.CrawlerName
+                                });
+                                if (startCrawlerResponse.HttpStatusCode.Equals(HttpStatusCode.OK))
+                                {
+                                    context.Logger.LogLine("Crawler Started");
+                                    LogContextOperations.UpdateInputIngestionStatus(bucket);
+                                }
+                            }
+                        }
+                        else if (retrievedLI.InitialIngest == true)
+                        {
+                            context.Logger.LogLine("Log Input has been crawled before");
+                            if (retrievedGCE.JobName == null)
+                            {
+                                context.Logger.LogLine("Log Input has not be transferred over to RDS before");
+                                GlueDatabaseTable retrievedGDT = LogContextOperations.GetGlueDatabaseTable(retrievedLI.ID);
+                                CreateJobRequest createJobRequest = new CreateJobRequest
+                                {
+                                    Name = retrievedLI.Name,
+                                    DefaultArguments = new Dictionary<string, string>
+                                {
+                                    { "--enable-spark-ui", "true"},
+                                    { "--spark-event-logs-path", "s3://aws-glue-spark-188363912800-ap-southeast-1"},
+                                    { "--job-bookmark-option", "job-bookmark-enable"},
+                                    { "--job-language", "python"},
+                                    { "--TempDir", "s3://aws-glue-temporary-188363912800-ap-southeast-1/root"},
+                                    { "--TABLE_NAME", retrievedGDT.Name}
+                                },
+                                    MaxCapacity = 10.0,
+                                    Role = "GlueServiceRole",
+                                    Connections = new ConnectionsList
+                                    {
+                                        Connections = new List<string>
+                                    {
+                                        "SmartInsights"
+                                    }
+                                    },
+                                    Tags = new Dictionary<string, string>
+                                {
+                                    {"Project","OSPJ" }
+                                },
+                                    MaxRetries = 0,
+                                    GlueVersion = "1.0",
+                                    ExecutionProperty = new ExecutionProperty
+                                    {
+                                        MaxConcurrentRuns = 1
+                                    },
+                                    Timeout = 2880
+                                };
+                                if (retrievedLI.LogInputCategory.Equals(LogInputCategory.ApacheWebServer))
+                                {
+                                    createJobRequest.Command = new JobCommand
+                                    {
+                                        PythonVersion = "3",
+                                        Name = "glueetl",
+                                        ScriptLocation = "s3://aws-glue-scripts-188363912800-ap-southeast-1/root/Apache CLF"
+                                    };
+                                }
+                                else if (retrievedLI.LogInputCategory.Equals(LogInputCategory.SquidProxy))
+                                {
+                                    createJobRequest.Command = new JobCommand
+                                    {
+                                        PythonVersion = "3",
+                                        Name = "glueetl",
+                                        ScriptLocation = "s3://aws-glue-scripts-188363912800-ap-southeast-1/root/Cisco Squid Proxy"
+                                    };
+                                }
+                                else if (retrievedLI.LogInputCategory.Equals(LogInputCategory.SSH))
+                                {
+                                    createJobRequest.Command = new JobCommand
+                                    {
+                                        PythonVersion = "3",
+                                        Name = "glueetl",
+                                        ScriptLocation = "s3://aws-glue-scripts-188363912800-ap-southeast-1/root/Splunk SSH"
+                                    };
+                                }
+                                else if (retrievedLI.LogInputCategory.Equals(LogInputCategory.WindowsEventLogs))
+                                {
+                                    createJobRequest.Command = new JobCommand
+                                    {
+                                        PythonVersion = "3",
+                                        Name = "glueetl",
+                                        ScriptLocation = "s3://aws-glue-scripts-188363912800-ap-southeast-1/root/Windows Events"
+                                    };
+                                }
+                                CreateJobResponse createJobResponse = await GlueClient.CreateJobAsync(createJobRequest);
+                                if (createJobResponse.HttpStatusCode.Equals(HttpStatusCode.OK))
+                                {
+                                    context.Logger.LogLine("Job Created");
+                                    StartJobRunResponse startJobRunResponse = await GlueClient.StartJobRunAsync(new StartJobRunRequest
+                                    {
+                                        JobName = createJobResponse.Name,
+                                        MaxCapacity = 10.0
+                                    });
+                                    if (startJobRunResponse.HttpStatusCode.Equals(HttpStatusCode.OK))
+                                    {
+                                        context.Logger.LogLine("Job Just Created Started");
+                                        retrievedGCE.JobName = createJobResponse.Name;
+                                        LogContextOperations.UpdateGlueConsolidatedEntity(retrievedGCE);
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                context.Logger.LogLine("Log Input has been transferred over to RDS before");
+                                context.Logger.LogLine(retrievedGCE.JobName);
+                                GetJobRunsResponse getJobRunsResponse = await GlueClient.GetJobRunsAsync(new GetJobRunsRequest
+                                {
+                                    JobName = retrievedGCE.JobName
+                                });
+                                bool jobRunning = false;
+                                context.Logger.LogLine(getJobRunsResponse.JobRuns.Count().ToString());
+                                foreach (JobRun j in getJobRunsResponse.JobRuns)
+                                {
+                                    context.Logger.LogLine(j.Id + " | " + j.JobRunState);
+                                    if (j.JobRunState.Equals(JobRunState.STARTING) || j.JobRunState.Equals(JobRunState.RUNNING) || j.JobRunState.Equals(JobRunState.STOPPING))
+                                    {
+                                        jobRunning = true;
+                                        break;
+                                    }
+                                }
+                                context.Logger.LogLine(jobRunning.ToString());
+                                if (!jobRunning)
+                                {
+                                    StartJobRunResponse startJobRunResponse = await GlueClient.StartJobRunAsync(new StartJobRunRequest
+                                    {
+                                        JobName = retrievedGCE.JobName,
+                                        MaxCapacity = 10.0
+                                    });
+                                    if (startJobRunResponse.HttpStatusCode.Equals(HttpStatusCode.OK))
+                                        context.Logger.LogLine("Job Started");
+                                }
                             }
                         }
                     }
-                    else if (retrievedLI.InitialIngest == true)
+                }
+            }
+            else
+            {
+                List<GlueConsolidatedEntity> retrievedGlueConsolidatedEntities = LogContextOperations.GetGlueConsolidatedEntities();
+                foreach (GlueConsolidatedEntity entity in retrievedGlueConsolidatedEntities)
+                {
+                    context.Logger.LogLine(entity.CrawlerName);
+                    GetCrawlerResponse getCrawlerResponse = await GlueClient.GetCrawlerAsync(new GetCrawlerRequest
                     {
-                        context.Logger.LogLine("Log Input has been crawled before");
-                        if (retrievedGCE.JobName == null)
+                        Name = entity.CrawlerName
+                    });
+                    context.Logger.LogLine(getCrawlerResponse.Crawler.Name);
+                    if (getCrawlerResponse.HttpStatusCode.Equals(HttpStatusCode.OK) && getCrawlerResponse.Crawler.State.Equals(CrawlerState.READY))
+                    {
+                        if (entity.LinkedTable == null)
                         {
-                            context.Logger.LogLine("Log Input has not be transferred over to RDS before");
+                            context.Logger.LogLine("Crawler just completed, creating job now");
+                            LogContextOperations.AddGlueDatabaseTable(new GlueDatabaseTable
+                            {
+                                LinkedDatabaseID = 1,
+                                LinkedGlueConsolidatedInputEntityID = entity.ID,
+                                Name = getCrawlerResponse.Crawler.Targets.S3Targets[0].Path.Substring(5)
+                            });
+                            GlueDatabaseTable retrievedGDT = LogContextOperations.GetGlueDatabaseTable(entity.LinkedLogInputID);
+                            LogInput retrievedLI = LogContextOperations.GetLogInputByID(entity.LinkedLogInputID);
                             CreateJobRequest createJobRequest = new CreateJobRequest
                             {
                                 Name = retrievedLI.Name,
@@ -125,7 +270,8 @@ namespace OpsSecProjectLambda
                                     { "--spark-event-logs-path", "s3://aws-glue-spark-188363912800-ap-southeast-1"},
                                     { "--job-bookmark-option", "job-bookmark-enable"},
                                     { "--job-language", "python"},
-                                    { "--TempDir", "s3://aws-glue-temporary-188363912800-ap-southeast-1/root"}
+                                    { "--TempDir", "s3://aws-glue-temporary-188363912800-ap-southeast-1/root"},
+                                    { "--TABLE_NAME", retrievedGDT.Name}
                                 },
                                 MaxCapacity = 10.0,
                                 Role = "GlueServiceRole",
@@ -154,7 +300,7 @@ namespace OpsSecProjectLambda
                                 {
                                     PythonVersion = "3",
                                     Name = "glueetl",
-                                    ScriptLocation = "s3://aws-glue-scripts-188363912800-ap-southeast-1/root/Apache Web Logs"
+                                    ScriptLocation = "s3://aws-glue-scripts-188363912800-ap-southeast-1/root/Apache CLF"
                                 };
                             }
                             else if (retrievedLI.LogInputCategory.Equals(LogInputCategory.SquidProxy))
@@ -163,7 +309,7 @@ namespace OpsSecProjectLambda
                                 {
                                     PythonVersion = "3",
                                     Name = "glueetl",
-                                    ScriptLocation = "s3://aws-glue-scripts-188363912800-ap-southeast-1/root/Squid Proxy Logs"
+                                    ScriptLocation = "s3://aws-glue-scripts-188363912800-ap-southeast-1/root/Cisco Squid Proxy"
                                 };
                             }
                             else if (retrievedLI.LogInputCategory.Equals(LogInputCategory.SSH))
@@ -172,7 +318,7 @@ namespace OpsSecProjectLambda
                                 {
                                     PythonVersion = "3",
                                     Name = "glueetl",
-                                    ScriptLocation = "s3://aws-glue-scripts-188363912800-ap-southeast-1/root/SSH Logs"
+                                    ScriptLocation = "s3://aws-glue-scripts-188363912800-ap-southeast-1/root/Splunk SSH"
                                 };
                             }
                             else if (retrievedLI.LogInputCategory.Equals(LogInputCategory.WindowsEventLogs))
@@ -181,7 +327,7 @@ namespace OpsSecProjectLambda
                                 {
                                     PythonVersion = "3",
                                     Name = "glueetl",
-                                    ScriptLocation = "s3://aws-glue-scripts-188363912800-ap-southeast-1/root/Windows Security Logs"
+                                    ScriptLocation = "s3://aws-glue-scripts-188363912800-ap-southeast-1/root/Windows Events"
                                 };
                             }
                             CreateJobResponse createJobResponse = await GlueClient.CreateJobAsync(createJobRequest);
@@ -196,46 +342,15 @@ namespace OpsSecProjectLambda
                                 if (startJobRunResponse.HttpStatusCode.Equals(HttpStatusCode.OK))
                                 {
                                     context.Logger.LogLine("Job Just Created Started");
-                                    retrievedGCE.JobName = createJobResponse.Name;
-                                    LogContextOperations.UpdateGlueConsolidatedEntity(retrievedGCE);
+                                    entity.JobName = createJobResponse.Name;
+                                    LogContextOperations.UpdateGlueConsolidatedEntity(entity);
                                 }
                             }
-                        }
-                        else
-                        {
-                            context.Logger.LogLine("Log Input has been transferred over to RDS before");
-                            context.Logger.LogLine(retrievedGCE.JobName);
-                            GetJobRunsResponse getJobRunsResponse = await GlueClient.GetJobRunsAsync(new GetJobRunsRequest
-                            {
-                                JobName = retrievedGCE.JobName
-                            });
-                            bool jobRunning = false;
-                            context.Logger.LogLine(getJobRunsResponse.JobRuns.Count().ToString());
-                            foreach (JobRun j in getJobRunsResponse.JobRuns)
-                            {
-                                context.Logger.LogLine(j.Id + " | "+j.JobRunState);
-                                if (j.JobRunState.Equals(JobRunState.STARTING) || j.JobRunState.Equals(JobRunState.RUNNING) || j.JobRunState.Equals(JobRunState.STOPPING))
-                                {
-                                    jobRunning = true;
-                                    break;
-                                }
-                            }
-                            context.Logger.LogLine(jobRunning.ToString());
-                            if (!jobRunning)
-                            {
-                                StartJobRunResponse startJobRunResponse = await GlueClient.StartJobRunAsync(new StartJobRunRequest
-                                {
-                                    JobName = retrievedGCE.JobName,
-                                    MaxCapacity = 10.0
-                                });
-                                if (startJobRunResponse.HttpStatusCode.Equals(HttpStatusCode.OK))
-                                    context.Logger.LogLine("Job Started");
-                            }
+                            break;
                         }
                     }
                 }
             }
-            return updatedInputs;
         }
 
         private void ConfigureServices(IServiceCollection services)

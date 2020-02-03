@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace OpsSecProjectLambda.Abstractions
 {
@@ -7,7 +8,8 @@ namespace OpsSecProjectLambda.Abstractions
         bool IfInputExist(string Name);
         bool InputIngestionStatus(string Name);
         bool UpdateInputIngestionStatus(string Name);
-        LogInput GetLogInput(string Name);
+        LogInput GetLogInputByName(string Name);
+        LogInput GetLogInputByID(int ID);
         GlueConsolidatedEntity GetGlueConsolidatedEntity(int ID);
         bool AddGlueConsolidatedEntity(GlueConsolidatedEntity input);
         bool UpdateGlueConsolidatedEntity(GlueConsolidatedEntity input);
@@ -15,5 +17,7 @@ namespace OpsSecProjectLambda.Abstractions
         bool UpdateGlueDatabaseTable(GlueDatabaseTable input);
         string GetInputS3BucketName(int ID);
         GlueDatabase GetGlueDatabase();
+        bool AddGlueDatabaseTable(GlueDatabaseTable input);
+        List<GlueConsolidatedEntity> GetGlueConsolidatedEntities();
     }
 }

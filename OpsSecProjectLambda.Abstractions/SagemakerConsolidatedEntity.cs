@@ -13,13 +13,26 @@ namespace OpsSecProjectLambda.Abstractions
     {
         IP_Insights, Random_Cut_Forest
     }
+    public enum TrainingType
+    {
+        Automatic, Manual
+    }
     public class SagemakerConsolidatedEntity
     {
         public int ID { get; set; }
         public SagemakerAlgorithm SagemakerAlgorithm { get; set; }
+        public TrainingType TrainingType { get; set; }
+        public string CondtionalField { get; set; }
+        public string Condtion { get; set; }
+        public string IPAddressField { get; set; }
+        public string UserField { get; set; }
+        public string CurrentInputDataKey { get; set; }
+        public string CurrentModelFileKey { get; set; }
+        public string CheckpointKey { get; set; }
+        public double Threshold { get; set; }
         public SagemakerStatus SagemakerStatus { get; set; }
         public SagemakerErrorStage SagemakerErrorStage { get; set; }
-        public string ModelName { get; set; }
+        public string CurrentModelName { get; set; }
         public string TrainingJobName { get; set; }
         public string TrainingJobARN { get; set; }
         public string EndpointConfigurationName { get; set; }

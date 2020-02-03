@@ -56,7 +56,7 @@ namespace OpsSecProjectLambda.EF
             }
         }
 
-        public LogInput GetLogInput(string Name)
+        public LogInput GetLogInputByName(string Name)
         {
             List<LogInput> inputs = Context.LogInputs.ToList();
             foreach (LogInput input in inputs)
@@ -65,6 +65,11 @@ namespace OpsSecProjectLambda.EF
                     return input;
             }
             return null;
+        }
+
+        public LogInput GetLogInputByID(int ID)
+        {
+            return Context.LogInputs.Find(ID);
         }
 
         public bool InputIngestionStatus(string Name)
@@ -150,6 +155,25 @@ namespace OpsSecProjectLambda.EF
         public GlueDatabase GetGlueDatabase()
         {
             return Context.GlueDatabases.Find(1);
+        }
+
+        public List<GlueConsolidatedEntity> GetGlueConsolidatedEntities()
+        {
+            return Context.GlueConsolidatedEntities.ToList();
+        }
+
+        public bool AddGlueDatabaseTable(GlueDatabaseTable input)
+        {
+            Context.GlueDatabaseTables.Add(input);
+            try
+            {
+                Context.SaveChanges();
+                return true;
+            }
+            catch (DbUpdateException)
+            {
+                return false;
+            }
         }
     }
 }

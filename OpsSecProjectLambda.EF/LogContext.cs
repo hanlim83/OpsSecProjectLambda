@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using OpsSecProjectLambda.Abstractions;
+using System;
 
 namespace OpsSecProjectLambda.EF
 {
@@ -13,18 +14,17 @@ namespace OpsSecProjectLambda.EF
         public DbSet<GlueDatabase> GlueDatabases { get; set; }
         public DbSet<GlueDatabaseTable> GlueDatabaseTables { get; set; }
         public DbSet<GlueConsolidatedEntity> GlueConsolidatedEntities { get; set; }
-        public DbSet<KinesisConsolidatedEntity> KinesisConsolidatedEntities { get; set; }
         public DbSet<SagemakerConsolidatedEntity> SagemakerConsolidatedEntities { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<LogInput>().ToTable("LogInputs");
             modelBuilder.Entity<LogInput>().Property(l => l.InitialIngest).HasDefaultValue(false);
+            modelBuilder.Entity<LogInput>().HasAlternateKey(l => l.Name).HasName("AlternateKey_LogInputName");
             modelBuilder.Entity<S3Bucket>().ToTable("S3Buckets");
+            modelBuilder.Entity<S3Bucket>().HasAlternateKey(b => b.Name).HasName("AlternateKey_BucketName");
             modelBuilder.Entity<GlueDatabase>().ToTable("GlueDatabases");
             modelBuilder.Entity<GlueDatabaseTable>().ToTable("GlueDatabaseTables");
             modelBuilder.Entity<GlueConsolidatedEntity>().ToTable("GlueConsolidatedEntities");
-            modelBuilder.Entity<KinesisConsolidatedEntity>().ToTable("KinesisConsolidatedEntities");
-            modelBuilder.Entity<KinesisConsolidatedEntity>().Property(k => k.AnalyticsEnabled).HasDefaultValue(false);
             modelBuilder.Entity<SagemakerConsolidatedEntity>().ToTable("SagemakerConsolidatedEntities");
             modelBuilder.Entity<SagemakerConsolidatedEntity>().Property(s => s.SagemakerStatus).HasDefaultValue(SagemakerStatus.Untrained);
             modelBuilder.Entity<SagemakerConsolidatedEntity>().Property(s => s.SagemakerErrorStage).HasDefaultValue(SagemakerErrorStage.None);

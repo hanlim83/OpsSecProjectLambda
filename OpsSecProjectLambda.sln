@@ -3,8 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29728.190
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpsSecProjectLambda", "OpsSecProjectLambda\OpsSecProjectLambda.csproj", "{F2F29A2A-9893-46E4-A64B-67C198234912}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpsSecProjectLambda.Abstractions", "OpsSecProjectLambda.Abstractions\OpsSecProjectLambda.Abstractions.csproj", "{7B5155D5-8F6B-4FAF-A13C-11FFF8CC4DF1}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{968F6DFA-5EC3-4752-BF10-6AF7A44D152C}"
@@ -21,16 +19,16 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpsSecProjectLambda.EF.Desi
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpsSecProjectLambda.EF", "OpsSecProjectLambda.EF\OpsSecProjectLambda.EF.csproj", "{CBFE26DA-E7DE-4BCC-B86A-1C45163F05F0}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpsSecProjectLambda.S3Events", "OpsSecProjectLambda.S3Events\OpsSecProjectLambda.S3Events.csproj", "{782D5ADE-AD5F-47EC-8AB0-86767150F42B}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpsSecProjectLambda.CloudWatchEvents", "OpsSecProjectLambda.CloudWatchEvents\OpsSecProjectLambda.CloudWatchEvents.csproj", "{05653064-4EC9-4173-9B42-1666E098D2D8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{F2F29A2A-9893-46E4-A64B-67C198234912}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F2F29A2A-9893-46E4-A64B-67C198234912}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{F2F29A2A-9893-46E4-A64B-67C198234912}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{F2F29A2A-9893-46E4-A64B-67C198234912}.Release|Any CPU.Build.0 = Release|Any CPU
 		{7B5155D5-8F6B-4FAF-A13C-11FFF8CC4DF1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{7B5155D5-8F6B-4FAF-A13C-11FFF8CC4DF1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7B5155D5-8F6B-4FAF-A13C-11FFF8CC4DF1}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -51,6 +49,14 @@ Global
 		{CBFE26DA-E7DE-4BCC-B86A-1C45163F05F0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CBFE26DA-E7DE-4BCC-B86A-1C45163F05F0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CBFE26DA-E7DE-4BCC-B86A-1C45163F05F0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{782D5ADE-AD5F-47EC-8AB0-86767150F42B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{782D5ADE-AD5F-47EC-8AB0-86767150F42B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{782D5ADE-AD5F-47EC-8AB0-86767150F42B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{782D5ADE-AD5F-47EC-8AB0-86767150F42B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{05653064-4EC9-4173-9B42-1666E098D2D8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{05653064-4EC9-4173-9B42-1666E098D2D8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{05653064-4EC9-4173-9B42-1666E098D2D8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{05653064-4EC9-4173-9B42-1666E098D2D8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using OpsSecProjectLambda.Abstractions;
-using System;
 
 namespace OpsSecProjectLambda.EF
 {

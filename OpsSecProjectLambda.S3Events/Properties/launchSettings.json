@@ -1,0 +1,17 @@
+{
+  "profiles": {
+    "Mock Lambda Test Tool": {
+      "commandName": "Executable",
+      "commandLineArgs": "--port 5050",
+      "executablePath": "C:\\Users\\%USERNAME%\\.dotnet\\tools\\dotnet-lambda-test-tool-2.1.exe",
+      "workingDirectory": ".\\bin\\Debug\\netcoreapp2.1",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "RDS_HOSTNAME": "ospj-dev.cveglglrcyfg.ap-southeast-1.rds.amazonaws.com",
+        "RDS_PORT": "1433",
+        "RDS_USERNAME": "admin",
+        "RDS_PASSWORD": "53lMOOm5RMfvwC3j1nDL"
+      }
+    }
+  }
+}

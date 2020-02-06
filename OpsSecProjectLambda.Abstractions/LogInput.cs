@@ -12,7 +12,6 @@ namespace OpsSecProjectLambda.Abstractions
         public string Name { get; set; }
         public string FilePath { get; set; }
         public string Filter { get; set; }
-        public string LogType { get; set; }
         public LogInputCategory LogInputCategory { get; set; }
         public string ConfigurationJSON { get; set; }
         public bool InitialIngest { get; set; }

@@ -1,4 +1,4 @@
-﻿namespace OpsSecProjectLambda.S3Events
+﻿namespace OpsSecProjectLambda
 {
     public class Program
     {

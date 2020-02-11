@@ -13,6 +13,7 @@ namespace OpsSecProjectLambda.Abstractions
         public string FilePath { get; set; }
         public string Filter { get; set; }
         public string LogType { get; set; }
+
         public LogInputCategory LogInputCategory { get; set; }
         public string ConfigurationJSON { get; set; }
         public bool InitialIngest { get; set; }
@@ -21,6 +22,5 @@ namespace OpsSecProjectLambda.Abstractions
         public int LinkedS3BucketID { get; set; }
         public virtual S3Bucket LinkedS3Bucket { get; set; }
         public virtual GlueConsolidatedEntity LinkedGlueEntity { get; set; }
-        public virtual ICollection<Trigger> LinkedSagemakerEntities { get; set; }
     }
 }

@@ -33,7 +33,6 @@ namespace OpsSecProjectLambda.Abstractions
         public SagemakerStatus SagemakerStatus { get; set; }
         public SagemakerErrorStage SagemakerErrorStage { get; set; }
         public string CurrentModelName { get; set; }
-        public string[] DeprecatedModelNames { get; set; }
         public string TrainingJobName { get; set; }
         public string TrainingJobARN { get; set; }
         public string EndpointConfigurationName { get; set; }
@@ -44,7 +43,6 @@ namespace OpsSecProjectLambda.Abstractions
         public string HyperParameterTurningJobARN { get; set; }
         public int InferenceBookmark { get; set; }
         public int TrainingBookmark { get; set; }
-        public string[] IgnoredEvents { get; set; }
         public int LinkedLogInputID { get; set; }
         public virtual LogInput LinkedLogInput { get; set; }
     }

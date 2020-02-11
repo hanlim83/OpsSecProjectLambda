@@ -12,7 +12,7 @@
     "framework"     : "netcoreapp2.1",
     "function-runtime" : "dotnetcore2.1",
     "function-memory-size" : 256,
-    "function-timeout"     : 300,
+    "function-timeout"     : 30,
     "function-handler"     : "OpsSecProjectLambda::OpsSecProjectLambda.Function::FunctionHandler",
     "environment-variables" : "\"GLUE_EXECUTION_ROLE\"=\"arn:aws:iam::188363912800:role/GlueServiceRole\";\"RDS_HOSTNAME\"=\"ospj-dev.cveglglrcyfg.ap-southeast-1.rds.amazonaws.com\";\"RDS_PASSWORD\"=\"53lMOOm5RMfvwC3j1nDL\";\"ASPNETCORE_ENVIRONMENT\"=\"Staging\";\"RDS_PORT\"=\"1433\";\"RDS_USERNAME\"=\"admin\"",
     "function-name"         : "SmartInsights-Glue-Automator",

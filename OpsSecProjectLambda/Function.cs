@@ -234,6 +234,7 @@ namespace OpsSecProjectLambda
                         else if (retrievedLI.InitialIngest == true)
                         {
                             context.Logger.LogLine("Log Input has been crawled before");
+                            context.Logger.LogLine(retrievedGCE.JobName);
                             if (retrievedGCE.JobName == null && retrievedGDT == null)
                             {
                                 context.Logger.LogLine("Log Input has not be transferred over to RDS before due to no job");
